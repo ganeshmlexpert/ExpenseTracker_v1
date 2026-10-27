@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#176b55">
+  <meta name="description" content="A private, offline-friendly personal expense tracker.">
+  <link rel="manifest" href="manifest.json">
+  <title>Paisa — Expense Tracker</title>
+  <style>
+    :root{color-scheme:light;--bg:#f4f7f5;--panel:#fff;--text:#17231e;--muted:#718078;--line:#e1e9e4;--brand:#176b55;--brand2:#e0f3eb;--danger:#bd3f46;--shadow:0 8px 28px #173f2b0b}
+    @media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#101713;--panel:#18221c;--text:#eef5f0;--muted:#9aaba0;--line:#2b3a30;--brand:#7ad8b5;--brand2:#203b30;--danger:#ff858b;--shadow:0 8px 28px #0003}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;padding-bottom:calc(82px + env(safe-area-inset-bottom))}
+    button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #69bda0;outline-offset:2px}
+    .app{max-width:760px;margin:auto;padding:20px 16px 24px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}.brand{display:flex;align-items:center;gap:10px}.logo{width:42px;height:42px;border-radius:14px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:23px}.brand h1{font-size:21px;margin:0}.brand p{font-size:12px;color:var(--muted);margin:0}.iconbtn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:10px 12px}
+    .screen{display:none}.screen.active{display:block}.eyebrow{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;font-weight:700}.hero{background:var(--brand);color:white;border-radius:24px;padding:22px;margin-bottom:16px;box-shadow:var(--shadow)}.hero .eyebrow{color:#d1f0e3}.hero-amount{font-size:clamp(30px,8vw,42px);font-weight:800;letter-spacing:-1.4px;margin:5px 0 16px}.hero-foot{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:#d1f0e3}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0 22px}.stat,.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}.stat .value{font-size:21px;font-weight:750;margin-top:5px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:22px 0 12px}.section-head h2{font-size:17px;margin:0}.linkbtn{background:none;border:0;color:var(--brand);font-weight:700;padding:6px}.row{display:flex;align-items:center;gap:12px}.between{justify-content:space-between}.muted{color:var(--muted)}.small{font-size:12px}.expense-list{display:flex;flex-direction:column;gap:9px}.expense{display:flex;align-items:center;gap:12px;padding:12px;background:var(--panel);border:1px solid var(--line);border-radius:15px}.cat-icon{width:42px;height:42px;display:grid;place-items:center;background:var(--brand2);border-radius:13px;font-size:21px;flex-shrink:0}.expense-main{min-width:0;flex:1}.expense-main strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.expense-main span{font-size:12px;color:var(--muted)}.expense-amount{font-weight:750;white-space:nowrap}.empty{padding:28px 16px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px}
+    .formcard{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px}.field{display:flex;flex-direction:column;gap:7px;margin-bottom:15px}.field label{font-size:13px;font-weight:700}.field input,.field select,.field textarea,.search{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:12px;padding:12px}.field textarea{resize:vertical;min-height:74px}.amount-input{font-size:28px!important;font-weight:800}.chips{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 17px}.chip{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:999px;padding:9px 12px}.chip.selected{background:var(--brand2);border-color:var(--brand);color:var(--brand);font-weight:750}.primary{border:0;border-radius:13px;background:var(--brand);color:#fff;padding:13px 17px;font-weight:800;width:100%}.secondary{border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);padding:10px 12px;font-weight:650}.danger{color:var(--danger)}.form-actions{display:flex;gap:9px}.form-actions>*{flex:1}.tabs{position:fixed;z-index:5;bottom:0;left:0;right:0;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:var(--panel);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);max-width:760px;margin:auto}.tab{border:0;background:transparent;color:var(--muted);border-radius:12px;padding:8px 3px;font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px}.tab span{font-size:21px}.tab.active{background:var(--brand2);color:var(--brand)}
+    .periodbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:12px 0}.periodbar button{min-width:40px}.period-title{text-align:center;flex:1;font-weight:800}.segmented{display:flex;gap:5px;background:var(--brand2);padding:4px;border-radius:12px}.segmented button{border:0;background:transparent;color:var(--text);padding:8px 10px;border-radius:9px;flex:1}.segmented button.active{background:var(--panel);box-shadow:var(--shadow);font-weight:800}.bar-row{margin:14px 0}.bar-label{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:6px}.bar-track{height:9px;background:var(--line);border-radius:999px;overflow:hidden}.bar-fill{height:100%;background:var(--brand);border-radius:999px}.report-total{font-size:30px;font-weight:850;margin:5px 0 12px}.daybars{display:flex;align-items:end;gap:7px;height:130px;padding-top:12px}.daycol{flex:1;height:100%;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:5px;min-width:0}.daybar{width:min(100%,25px);background:var(--brand);border-radius:6px 6px 2px 2px;min-height:3px}.daylabel{font-size:10px;color:var(--muted)}.filters{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}.filters>*{min-width:0}.notice{position:fixed;left:16px;right:16px;bottom:92px;z-index:10;max-width:728px;margin:auto;padding:13px 15px;background:var(--text);color:var(--panel);border-radius:14px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;gap:12px}.notice button{border:0;background:transparent;color:var(--brand);font-weight:800}.hidden{display:none!important}.backup-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.backup-grid button{width:100%}.subheading{font-size:14px;margin:18px 0 8px}.footnote{font-size:12px;color:var(--muted);margin-top:16px}
+    @media(min-width:600px){.app{padding:28px 22px}.stats{grid-template-columns:repeat(4,1fr)}.stat .value{font-size:19px}.hero{padding:26px}.tabs{left:50%;transform:translateX(-50%);border-left:1px solid var(--line);border-right:1px solid var(--line);border-radius:16px 16px 0 0}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><div class="logo">₹</div><div><h1>Paisa</h1><p>Your money, in focus</p></div></div>
+    <button class="iconbtn" id="backupShortcut" aria-label="Open data backup">↗ Backup</button>
+  </header>
+
+  <main>
+    <section class="screen active" id="homeScreen">
+      <div class="hero"><div class="eyebrow">Total spending this month</div><div class="hero-amount" id="monthTotal">₹0.00</div><div class="hero-foot"><span id="monthCount">0 expenses</span><span id="monthAvg">Daily avg ₹0.00</span></div></div>
+      <div class="stats">
+        <div class="stat"><div class="eyebrow">Today</div><div class="value" id="todayTotal">₹0</div></div>
+        <div class="stat"><div class="eyebrow">This week</div><div class="value" id="weekTotal">₹0</div></div>
+        <div class="stat"><div class="eyebrow">Last 30 days</div><div class="value" id="thirtyTotal">₹0</div></div>
+        <div class="stat"><div class="eyebrow">All time</div><div class="value" id="allTotal">₹0</div></div>
+      </div>
+      <div class="card"><div class="row between"><div><div class="eyebrow">Week-on-week</div><div class="value" id="weekCompare" style="font-size:20px;font-weight:800;margin-top:5px">—</div></div><div class="cat-icon">📈</div></div><div class="small muted" id="weekCompareText">Compared with the previous 7 days</div></div>
+      <div class="section-head"><h2>Recent expenses</h2><button class="linkbtn" data-go="history">See all →</button></div>
+      <div id="recentList" class="expense-list"></div>
+      <button class="primary" style="margin-top:16px" data-go="add">＋ Add an expense</button>
+    </section>
+
+    <section class="screen" id="addScreen">
+      <div class="section-head"><h2 id="formTitle">Add expense</h2><span class="muted small">Saved on this device</span></div>
+      <form id="expenseForm" class="formcard">
+        <div class="field"><label for="amount">Amount (₹)</label><input class="amount-input" id="amount" name="amount" inputmode="decimal" autocomplete="off" placeholder="0.00" required type="number" min="0.01" max="999999999" step="0.01"></div>
+        <div class="field"><label>Choose a category</label><div id="categoryChips" class="chips"></div></div>
+        <div class="field"><label for="categorySelect">Category</label><select id="categorySelect" required></select></div>
+        <div class="field"><label for="note">Note (optional)</label><input id="note" maxlength="120" placeholder="e.g. Lunch with friends"></div>
+        <div class="field"><label for="dateTime">Date and time</label><input id="dateTime" type="datetime-local" required></div>
+        <div class="form-actions"><button class="primary" type="submit" id="saveExpense">Save expense</button><button class="secondary hidden" type="button" id="cancelEdit">Cancel</button></div>
+      </form>
+      <div class="footnote">Your entries stay on this device unless you export a backup. Export your data regularly.</div>
+    </section>
+
+    <section class="screen" id="reportsScreen">
+      <div class="section-head"><h2>Reports</h2><span class="muted small">Spending insights</span></div>
+      <div class="segmented" id="periodToggle"><button class="active" data-period="week">Week</button><button data-period="month">Month</button><button data-period="custom">Custom</button></div>
+      <div class="periodbar"><button class="secondary" id="periodPrev" aria-label="Previous period">‹</button><div class="period-title" id="periodTitle">This week</div><button class="secondary" id="periodNext" aria-label="Next period">›</button></div>
+      <div id="customDates" class="filters hidden"><div class="field"><label for="customStart">From</label><input id="customStart" type="date"></div><div class="field"><label for="customEnd">To</label><input id="customEnd" type="date"></div></div>
+      <div class="card"><div class="eyebrow">Total in selected period</div><div class="report-total" id="reportTotal">₹0.00</div><div class="muted small" id="reportCount">0 transactions</div></div>
+      <div class="section-head"><h2>Daily spending</h2></div><div class="card"><div id="dailyChart" class="daybars"></div><div id="dailyLegend" class="row between small muted" style="margin-top:10px"></div></div>
+      <div class="section-head"><h2>By category</h2></div><div class="card" id="categoryReport"></div>
+    </section>
+
+    <section class="screen" id="historyScreen">
+      <div class="section-head"><h2>History</h2><span class="muted small" id="historyCount">0 entries</span></div>
+      <input class="search" id="historySearch" placeholder="Search notes or categories…" aria-label="Search expenses">
+      <div class="filters" style="margin-top:10px"><select class="search" id="historyCategory" aria-label="Filter category"></select><select class="search" id="historySort" aria-label="Sort expenses"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="high">Amount: high to low</option><option value="low">Amount: low to high</option></select></div>
+      <div id="historyList" class="expense-list"></div>
+      <div class="section-head"><h2>Backup & restore</h2></div>
+      <div class="card"><div class="muted small">Keep a backup before changing devices or clearing browser data.</div><div class="backup-grid"><button class="secondary" id="exportJson">Export JSON</button><button class="secondary" id="exportCsv">Export CSV</button><button class="secondary" id="importButton">Import JSON</button><button class="secondary danger" id="clearAll">Clear all data</button></div><input type="file" id="importFile" accept=".json,application/json" class="hidden"><p class="footnote">Import replaces the current list after validation. Keep your existing backup safe.</p></div>
+    </section>
+  </main>
+</div>
+<nav class="tabs" aria-label="Main navigation">
+  <button class="tab active" data-tab="home"><span>⌂</span>Home</button>
+  <button class="tab" data-tab="add"><span>＋</span>Add</button>
+  <button class="tab" data-tab="reports"><span>▥</span>Reports</button>
+  <button class="tab" data-tab="history"><span>◷</span>History</button>
+</nav>
+<div id="toast" class="notice hidden" role="status"><span id="toastText"></span><button id="toastAction" class="hidden">Undo</button></div>
+<script>
+(() => {
+  'use strict';
+  const STORAGE_KEY = 'paisa-expenses-v1';
+  const CATEGORY_KEY = 'paisa-categories-v1';
+  const DEFAULT_CATEGORIES = [
+    {name:'Food',icon:'🍔'},{name:'Transport',icon:'🚌'},{name:'Shopping',icon:'🛍️'},
+    {name:'Bills',icon:'💡'},{name:'Education',icon:'📚'},{name:'Health',icon:'💊'},
+    {name:'Entertainment',icon:'🎬'},{name:'Other',icon:'📦'}
+  ];
+  let expenses = loadExpenses();
+  let categories = loadCategories();
+  let editingId = null, activeCategory = 'Food', period = 'week', periodOffset = 0;
+  let deletedExpense = null, toastTimer = null;
+
+  const $ = id => document.getElementById(id);
+  const money = n => new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(n)||0);
+  const moneyShort = n => new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(Number(n)||0);
+  const localDate = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const dateTimeLocal = d => `${localDate(d)}T${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  const dateLabel = ts => new Date(ts).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+  const timeLabel = ts => new Date(ts).toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit'});
+  const categoryInfo = name => categories.find(c=>c.name===name) || {name,icon:'📦'};
+  function loadExpenses(){try{const x=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');return Array.isArray(x)?x.filter(validExpense):[]}catch{return []}}
+  function loadCategories(){try{const x=JSON.parse(localStorage.getItem(CATEGORY_KEY)||'null');return Array.isArray(x)&&x.length?x:DEFAULT_CATEGORIES.slice()}catch{return DEFAULT_CATEGORIES.slice()}}
+  function validExpense(x){return x&&typeof x.id==='string'&&Number.isFinite(Number(x.ts))&&typeof x.cat==='string'&&Number.isFinite(Number(x.amt))&&Number(x.amt)>0&&Number(x.amt)<=999999999&&Number(x.amt).toFixed(2)===Number(x.amt).toString() ? true : !!(x&&typeof x.id==='string'&&Number.isFinite(Number(x.ts))&&typeof x.cat==='string'&&Number.isFinite(Number(x.amt))&&Number(x.amt)>0&&Number(x.amt)<=999999999&&Math.round(Number(x.amt)*100)===Number(x.amt)*100)}
+  function persist(){localStorage.setItem(STORAGE_KEY,JSON.stringify(expenses));localStorage.setItem(CATEGORY_KEY,JSON.stringify(categories))}
+  function sum(items){return items.reduce((s,e)=>s+Number(e.amt),0)}
+  function startOfDay(d){const x=new Date(d);x.setHours(0,0,0,0);return x}
+  function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
+  function startOfWeek(d){const x=startOfDay(d);x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
+  function startOfMonth(d){return new Date(d.getFullYear(),d.getMonth(),1)}
+  function inRange(e,start,end){return e.ts>=start.getTime()&&e.ts<end.getTime()}
+  function currentWeek(){return startOfWeek(new Date())}
+  function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+  function setScreen(name){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===name+'Screen'));document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='home')renderHome();if(name==='reports')renderReport();if(name==='history')renderHistory();if(name==='add')renderCategoryControls()}
+  function renderAll(){renderHome();renderReport();renderHistory();renderCategoryControls()}
+  function showToast(message,action){$('toastText').textContent=message;$('toastAction').classList.toggle('hidden',!action);$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>{$('toast').classList.add('hidden');deletedExpense=null},5000)}
+  function renderHome(){
+    const now=new Date(),todayStart=startOfDay(now),weekStart=startOfWeek(now),monthStart=startOfMonth(now);
+    const today=expenses.filter(e=>inRange(e,todayStart,addDays(todayStart,1))),week=expenses.filter(e=>inRange(e,weekStart,addDays(weekStart,7))),month=expenses.filter(e=>inRange(e,monthStart,new Date(now.getFullYear(),now.getMonth()+1,1))),last30=expenses.filter(e=>e.ts>=addDays(todayStart,-29).getTime()&&e.ts<addDays(todayStart,1).getTime());
+    $('monthTotal').textContent=money(sum(month));$('monthCount').textContent=`${month.length} expense${month.length===1?'':'s'}`;$('monthAvg').textContent=`Daily avg ${money(sum(month)/Math.max(1,now.getDate()))}`;
+    $('todayTotal').textContent=moneyShort(sum(today));$('weekTotal').textContent=moneyShort(sum(week));$('thirtyTotal').textContent=moneyShort(sum(last30));$('allTotal').textContent=moneyShort(sum(expenses));
+    const prevStart=addDays(weekStart,-7),prev=expenses.filter(e=>inRange(e,prevStart,weekStart)),cur=sum(week),old=sum(prev);
+    if(old===0){$('weekCompare').textContent=cur===0?'No spending yet':'New spending';$('weekCompareText').textContent=cur===0?'No expenses recorded this week':'No spending recorded in the previous week'}
+    else {const pct=(cur-old)/old*100;$('weekCompare').textContent=`${pct>0?'↑':pct<0?'↓':'→'} ${Math.abs(pct).toFixed(1)}%`;$('weekCompareText').textContent=`${money(cur)} this week vs ${money(old)} last week`}
+    const recent=expenses.slice().sort((a,b)=>b.ts-a.ts).slice(0,5);$('recentList').innerHTML=recent.length?recent.map(expenseRow).join(''):'<div class="empty">No expenses yet. Add your first expense to get started.</div>';
+  }
+  function expenseRow(e,history=false){const c=categoryInfo(e.cat);return `<div class="expense"><div class="cat-icon">${escapeHtml(c.icon)}</div><div class="expense-main"><strong>${escapeHtml(e.note||e.cat)}</strong><span>${escapeHtml(e.cat)} · ${escapeHtml(dateLabel(e.ts))} · ${escapeHtml(timeLabel(e.ts))}</span></div><div class="expense-amount">${money(e.amt)}${history?`<div class="row" style="justify-content:flex-end;gap:4px;margin-top:5px"><button class="linkbtn small" data-edit="${escapeHtml(e.id)}">Edit</button><button class="linkbtn small danger" data-delete="${escapeHtml(e.id)}">Delete</button></div>`:''}</div></div>`}
+  function renderCategoryControls(){
+    $('categoryChips').innerHTML=categories.map(c=>`<button type="button" class="chip ${activeCategory===c.name?'selected':''}" data-cat="${escapeHtml(c.name)}">${escapeHtml(c.icon)} ${escapeHtml(c.name)}</button>`).join('')+`<button type="button" class="chip" id="addCategoryChip">＋ Custom</button>`;
+    $('categorySelect').innerHTML=categories.map(c=>`<option value="${escapeHtml(c.name)}">${escapeHtml(c.icon)} ${escapeHtml(c.name)}</option>`).join('');
+    $('categorySelect').value=categories.some(c=>c.name===activeCategory)?activeCategory:categories[0].name;
+    $('historyCategory').innerHTML='<option value="">All categories</option>'+categories.map(c=>`<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('');
+  }
+  function selectCategory(name){activeCategory=name;$('categorySelect').value=name;renderCategoryControls()}
+  function resetForm(){editingId=null;$('expenseForm').reset();activeCategory=categories[0]?.name||'Other';$('categorySelect').value=activeCategory;$('dateTime').value=dateTimeLocal(new Date());$('formTitle').textContent='Add expense';$('saveExpense').textContent='Save expense';$('cancelEdit').classList.add('hidden');renderCategoryControls()}
+  function beginEdit(id){const e=expenses.find(x=>x.id===id);if(!e)return;editingId=id;activeCategory=e.cat;if(!categories.some(c=>c.name===e.cat))categories.push({name:e.cat,icon:'📦'});$('amount').value=Number(e.amt).toFixed(2);$('note').value=e.note||'';$('dateTime').value=dateTimeLocal(new Date(e.ts));$('formTitle').textContent='Edit expense';$('saveExpense').textContent='Save changes';$('cancelEdit').classList.remove('hidden');renderCategoryControls();$('categorySelect').value=e.cat;setScreen('add')}
+  function getReportRange(){
+    const now=new Date();let start,end;
+    if(period==='week'){start=addDays(startOfWeek(now),periodOffset*7);end=addDays(start,7)}
+    else if(period==='month'){start=new Date(now.getFullYear(),now.getMonth()+periodOffset,1);end=new Date(start.getFullYear(),start.getMonth()+1,1)}
+    else {const a=$('customStart').value,b=$('customEnd').value;start=a?new Date(a+'T00:00:00'):startOfMonth(now);end=b?addDays(new Date(b+'T00:00:00'),1):addDays(start,1);if(end<=start)end=addDays(start,1)}
+    return {start,end};
+  }
+  function renderReport(){
+    const {start,end}=getReportRange(),items=expenses.filter(e=>inRange(e,start,end));let title='';
+    if(period==='week')title=`${start.toLocaleDateString('en-IN',{day:'numeric',month:'short'})} – ${addDays(end,-1).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}`;
+    else if(period==='month')title=start.toLocaleDateString('en-IN',{month:'long',year:'numeric'});
+    else title=`${start.toLocaleDateString('en-IN',{day:'numeric',month:'short'})} – ${addDays(end,-1).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}`;
+    $('periodTitle').textContent=title;$('customDates').classList.toggle('hidden',period!=='custom');$('periodPrev').disabled=period==='custom';$('periodNext').disabled=period==='custom';
+    $('reportTotal').textContent=money(sum(items));$('reportCount').textContent=`${items.length} transaction${items.length===1?'':'s'}`;
+    const days=Math.max(1,Math.min(31,Math.round((end-start)/86400000))),actualStart=start,actualEnd=end;let vals=[];
+    for(let i=0;i<days;i++){const d=addDays(actualStart,i);vals.push({date:d,total:sum(items.filter(e=>localDate(new Date(e.ts))===localDate(d)))});}
+    const max=Math.max(1,...vals.map(v=>v.total));$('dailyChart').innerHTML=vals.map(v=>`<div class="daycol" title="${escapeHtml(localDate(v.date))}: ${escapeHtml(money(v.total))}"><div class="daybar" style="height:${Math.max(3,v.total/max*100)}%"></div><div class="daylabel">${escapeHtml(period==='month'||period==='custom'?String(v.date.getDate()):v.date.toLocaleDateString('en-IN',{weekday:'short'}))}</div></div>`).join('');
+    $('dailyLegend').innerHTML=`<span>${vals.length} days</span><span>Peak ${moneyShort(max===1&&vals.every(v=>!v.total)?0:max)}</span>`;
+    const grouped={};items.forEach(e=>grouped[e.cat]=(grouped[e.cat]||0)+Number(e.amt));const rows=Object.entries(grouped).sort((a,b)=>b[1]-a[1]),top=Math.max(1,...rows.map(x=>x[1]));
+    $('categoryReport').innerHTML=rows.length?rows.map(([name,value])=>`<div class="bar-row"><div class="bar-label"><span>${escapeHtml(categoryInfo(name).icon)} ${escapeHtml(name)}</span><strong>${money(value)} · ${(value/(sum(items)||1)*100).toFixed(1)}%</strong></div><div class="bar-track"><div class="bar-fill" style="width:${value/top*100}%"></div></div></div>`).join(''):'<div class="empty">No expenses in this period.</div>';
+  }
+  function renderHistory(){
+    const query=$('historySearch').value.trim().toLowerCase(),cat=$('historyCategory').value,sort=$('historySort').value;
+    let list=expenses.filter(e=>(!cat||e.cat===cat)&&(!query||`${e.cat} ${e.note||''}`.toLowerCase().includes(query)));
+    list.sort(sort==='oldest'?(a,b)=>a.ts-b.ts:sort==='high'?(a,b)=>b.amt-a.amt:sort==='low'?(a,b)=>a.amt-b.amt:(a,b)=>b.ts-a.ts);
+    $('historyCount').textContent=`${list.length} entr${list.length===1?'y':'ies'}`;$('historyList').innerHTML=list.length?list.map(e=>expenseRow(e,true)).join(''):'<div class="empty">No matching expenses found.</div>';
+  }
+  function download(filename,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+  function exportJson(){download(`paisa-backup-${localDate(new Date())}.json`,JSON.stringify({version:1,exportedAt:new Date().toISOString(),categories,expenses},null,2),'application/json')}
+  function exportCsv(){const rows=[['id','timestamp','date','category','note','amount'],...expenses.slice().sort((a,b)=>a.ts-b.ts).map(e=>[e.id,new Date(e.ts).toISOString(),localDate(new Date(e.ts)),e.cat,e.note||'',Number(e.amt).toFixed(2)])];const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\r\n');download(`paisa-expenses-${localDate(new Date())}.csv`,'\ufeff'+csv,'text/csv;charset=utf-8')}
+  function customCategory(){const name=prompt('Enter a category name (up to 24 characters):');if(!name)return;const clean=name.trim().slice(0,24);if(!clean)return;if(categories.some(c=>c.name.toLowerCase()===clean.toLowerCase())){selectCategory(categories.find(c=>c.name.toLowerCase()===clean.toLowerCase()).name);return}categories.push({name:clean,icon:'📦'});activeCategory=clean;persist();renderCategoryControls();selectCategory(clean)}
+  document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.tab==='add'&&!editingId)resetForm();setScreen(b.dataset.tab)}));
+  document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.go==='add')resetForm();setScreen(b.dataset.go)}));
+  $('backupShortcut').addEventListener('click',()=>{setScreen('history');$('exportJson').focus()});
+  $('categoryChips').addEventListener('click',e=>{const chip=e.target.closest('[data-cat]');if(chip)selectCategory(chip.dataset.cat);if(e.target.closest('#addCategoryChip'))customCategory()});
+  $('categorySelect').addEventListener('change',e=>{activeCategory=e.target.value;renderCategoryControls()});
+  $('expenseForm').addEventListener('submit',e=>{
+    e.preventDefault();const amountText=$('amount').value.trim(),amt=Number(amountText),ts=new Date($('dateTime').value).getTime();
+    if(!amountText||!Number.isFinite(amt)||amt<=0||amt>999999999||Math.round(amt*100)!==amt*100){alert('Enter an amount greater than ₹0 with no more than two decimal places.');return}
+    if(!Number.isFinite(ts)){alert('Choose a valid date and time.');return}
+    const cat=$('categorySelect').value;if(!cat){alert('Choose a category.');return}
+    const record={id:editingId||((crypto.randomUUID&&crypto.randomUUID())||`${Date.now()}-${Math.random().toString(16).slice(2)}`),ts,cat,note:$('note').value.trim(),amt:Math.round(amt*100)/100};
+    if(editingId)expenses=expenses.map(x=>x.id===editingId?record:x);else expenses.push(record);
+    persist();resetForm();renderAll();setScreen('home');showToast(editingId?'Expense updated':'Expense saved');
+  });
+  $('cancelEdit').addEventListener('click',()=>{resetForm();setScreen('history')});
+  $('periodToggle').addEventListener('click',e=>{const b=e.target.closest('[data-period]');if(!b)return;period=b.dataset.period;periodOffset=0;document.querySelectorAll('#periodToggle button').forEach(x=>x.classList.toggle('active',x===b));const now=new Date();$('customStart').value=localDate(startOfMonth(now));$('customEnd').value=localDate(now);renderReport()});
+  $('periodPrev').addEventListener('click',()=>{periodOffset--;renderReport()});$('periodNext').addEventListener('click',()=>{periodOffset++;renderReport()});$('customStart').addEventListener('change',renderReport);$('customEnd').addEventListener('change',renderReport);
+  $('historySearch').addEventListener('input',renderHistory);$('historyCategory').addEventListener('change',renderHistory);$('historySort').addEventListener('change',renderHistory);
+  $('historyList').addEventListener('click',e=>{const edit=e.target.closest('[data-edit]'),del=e.target.closest('[data-delete]');if(edit)beginEdit(edit.dataset.edit);if(del){const record=expenses.find(x=>x.id===del.dataset.delete);if(!record)return;if(!confirm(`Delete this ${record.cat} expense for ${money(record.amt)}?`))return;deletedExpense=record;expenses=expenses.filter(x=>x.id!==record.id);persist();renderAll();showToast('Expense deleted',true)}});
+  $('toastAction').addEventListener('click',()=>{if(!deletedExpense)return;expenses.push(deletedExpense);persist();deletedExpense=null;$('toast').classList.add('hidden');renderAll()});
+  $('exportJson').addEventListener('click',exportJson);$('exportCsv').addEventListener('click',exportCsv);$('importButton').addEventListener('click',()=>$('importFile').click());
+  $('importFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const raw=JSON.parse(await file.text()),list=Array.isArray(raw)?raw:raw.expenses;if(!Array.isArray(list)||!list.every(validExpense))throw new Error('The file does not contain a valid expense list.');if(!confirm(`Import ${list.length} expenses? This replaces the current list.`))return;expenses=list.map(x=>({id:String(x.id),ts:Number(x.ts),cat:String(x.cat),note:String(x.note||''),amt:Math.round(Number(x.amt)*100)/100}));if(Array.isArray(raw.categories)&&raw.categories.every(c=>c&&typeof c.name==='string'&&typeof c.icon==='string'))categories=raw.categories;expenses.forEach(x=>{if(!categories.some(c=>c.name===x.cat))categories.push({name:x.cat,icon:'📦'})});persist();renderCategoryControls();renderAll();showToast('Backup imported')}catch(err){alert(`Could not import backup: ${err.message}`)}finally{$('importFile').value=''}});
+  $('clearAll').addEventListener('click',()=>{if(!expenses.length){alert('There is no expense data to clear.');return}if(!confirm('Permanently clear every saved expense? Export a backup first if you may need this data.'))return;if(!confirm('This cannot be undone. Clear all expenses now?'))return;expenses=[];persist();renderAll();showToast('All expenses cleared')});
+  $('customStart').value=localDate(startOfMonth(new Date()));$('customEnd').value=localDate(new Date());resetForm();renderAll();
+  if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(err=>console.warn('Offline worker could not be registered:',err)))}
+})();
+</script>
+</body>
+</html>
